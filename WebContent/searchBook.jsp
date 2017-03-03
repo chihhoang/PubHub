@@ -63,7 +63,7 @@
 						
 						<td>
 							<c:forEach var="tag" items="${book.tags}">
-								<a href=""><c:out value="${tag.tag_name}," /></a>
+								<a href=""><c:out value="${tag.tag_name}  " /></a>
 							</c:forEach>
 						</td>
 						

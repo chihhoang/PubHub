@@ -15,6 +15,7 @@ public class TagDAOImpl implements TagDAO {
 
 	Connection connection;
 	PreparedStatement stmt;
+	PreparedStatement stmt2;
 
 	@Override
 	public boolean addTag(String tag_name) {
@@ -99,17 +100,22 @@ public class TagDAOImpl implements TagDAO {
 		try	{
 			connection = DAOUtilities.getConnection();
 			String sql = "DELETE FROM BOOK_TAGS WHERE ISBN_13=? AND TAG_NAME=?";
+			String sql2 = "DELETE FROM TAGS WHERE TAG_NAME=?";
 			stmt = connection.prepareStatement(sql);
 
 			stmt.setString(1, book.getIsbn13());
 			stmt.setString(2, tag.getTag_name());
 
-			if(stmt.executeUpdate() != 0)	{
-				System.out.println("Book_Tags table updated");
+			stmt2 = connection.prepareStatement(sql2);
+
+			stmt2.setString(1, tag.getTag_name());
+
+			if(stmt.executeUpdate() != 0 && stmt2.executeUpdate() != 0)	{
+				System.out.println("Book_Tags and Tags table updated");
 				return true;
 			}
 			else	{
-				System.out.println("Book_Tags table failed to update");
+				System.out.println("Book_Tags and Tag table failed to update");
 				return false;
 			}
 		}
