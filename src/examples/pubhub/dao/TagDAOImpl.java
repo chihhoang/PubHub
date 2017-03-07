@@ -15,48 +15,11 @@ public class TagDAOImpl implements TagDAO {
 
 	Connection connection;
 	PreparedStatement stmt;
-	PreparedStatement stmt2;
-
-	@Override
-	public boolean addTag(String tag_name) {
-		try	{
-			connection = DAOUtilities.getConnection();
-			String sql = "INSERT INTO TAGS VALUES (?)";
-			stmt = connection.prepareStatement(sql);
-
-			// add to Tags table
-			stmt.setString(1, tag_name);
-
-			if(stmt.executeUpdate() != 0)	{
-				System.out.println("Tags table updated");
-				return true;
-			}
-			else	{
-				return false;
-			}
-		}
-		catch(SQLException e)	{
-			e.printStackTrace();
-			return false;
-		}
-		finally	{
-			closeResources();	// close statement and connection
-		}
-	}
 
 	@Override
 	public boolean addTag(Tag tag, Book book) {
 
-		// the tag doesn't exist
-		if(!containsTag(tag.getTag_name()))	{
-			// populate the new tag in TAGS table
-			addTag(tag.getTag_name());
-		}
-		else	{
-			System.out.println("existed");
-		}
-
-		// insert to BOOK_TAGS
+		// insert into BOOK_TAGS
 		try	{
 			connection = DAOUtilities.getConnection();
 
@@ -75,7 +38,7 @@ public class TagDAOImpl implements TagDAO {
 				//					System.out.println(t.getTag_name());
 				//				}
 
-				book.setTags(tags);	// useless
+				book.setTags(tags);	// doing nothing - debugging in utils
 
 
 				return true;
@@ -100,22 +63,19 @@ public class TagDAOImpl implements TagDAO {
 		try	{
 			connection = DAOUtilities.getConnection();
 			String sql = "DELETE FROM BOOK_TAGS WHERE ISBN_13=? AND TAG_NAME=?";
-			String sql2 = "DELETE FROM TAGS WHERE TAG_NAME=?";
 			stmt = connection.prepareStatement(sql);
 
 			stmt.setString(1, book.getIsbn13());
 			stmt.setString(2, tag.getTag_name());
 
-			stmt2 = connection.prepareStatement(sql2);
 
-			stmt2.setString(1, tag.getTag_name());
 
-			if(stmt.executeUpdate() != 0 && stmt2.executeUpdate() != 0)	{
-				System.out.println("Book_Tags and Tags table updated");
+			if(stmt.executeUpdate() != 0)	{
+				System.out.println("Book_Tags table updated");
 				return true;
 			}
 			else	{
-				System.out.println("Book_Tags and Tag table failed to update");
+				System.out.println("Book_Tags table failed to update");
 				return false;
 			}
 		}
@@ -129,60 +89,34 @@ public class TagDAOImpl implements TagDAO {
 
 	}
 
-	@Override
-	public boolean containsTag(String tag_name) {
-		// check if the tag already exists
-		try	{
-			connection = DAOUtilities.getConnection();
-			String sql = "SELECT FROM TAGS WHERE TAG_NAME=?";
-			stmt = connection.prepareStatement(sql);
-
-			// add to Tags table
-			stmt.setString(1, tag_name);
-			ResultSet rs = stmt.executeQuery();
-
-			if(rs.next())	{
-				return true;
-			}
-			else	{
-				return false;
-			}
-
-		}
-		catch(SQLException e)	{
-			e.printStackTrace();
-			return false;
-		}
-		finally	{
-			closeResources();	// close statement and connection
-		}
-	}
-
-	@Override
-	public Tag getTagByTagName(String tag_name) {
-		Tag tag = new Tag();
-
-		try	{
-			connection = DAOUtilities.getConnection();
-			String sql = "SELECT TAG_NAME FROM TAGS WHERE TAG_NAME=?";
-			stmt = connection.prepareStatement(sql);
-			stmt.setString(1, tag_name);
-
-			ResultSet rs = stmt.executeQuery();
-
-			while(rs.next()){
-				tag.setTag_name(rs.getString("tag_name"));
-			}
-		}
-		catch(SQLException e)	{
-			e.printStackTrace();
-		}
-		finally	{
-			closeResources();	// close statement and connection
-		}
-
-		return tag;
-	}
+	//	@Override
+	//	public boolean containsTag(String tag_name) {
+	//		// check if the tag already exists
+	//		try	{
+	//			connection = DAOUtilities.getConnection();
+	//			String sql = "SELECT FROM TAGS WHERE TAG_NAME=?";
+	//			stmt = connection.prepareStatement(sql);
+	//
+	//			// add to Tags table
+	//			stmt.setString(1, tag_name);
+	//			ResultSet rs = stmt.executeQuery();
+	//
+	//			if(rs.next())	{
+	//				return true;
+	//			}
+	//			else	{
+	//				return false;
+	//			}
+	//
+	//		}
+	//		catch(SQLException e)	{
+	//			e.printStackTrace();
+	//			return false;
+	//		}
+	//		finally	{
+	//			closeResources();	// close statement and connection
+	//		}
+	//	}
 
 	@Override
 	public List<Tag> retrieveTags(Book book) {
