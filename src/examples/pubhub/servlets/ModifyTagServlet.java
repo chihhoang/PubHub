@@ -13,7 +13,7 @@ import examples.pubhub.model.Book;
 import examples.pubhub.utilities.DAOUtilities;
 
 /**
- * Servlet implementation class AddTagServlet
+ * Servlet implementation class ModifyTagServlet
  */
 
 @WebServlet("/ModifyTag")

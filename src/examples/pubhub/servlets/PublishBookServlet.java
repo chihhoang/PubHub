@@ -17,17 +17,19 @@ import examples.pubhub.model.Book;
 import examples.pubhub.utilities.DAOUtilities;
 
 @MultipartConfig // This annotation tells the server that this servlet has
-					// complex data other than forms
+// complex data other than forms
 // Notice the lack of the @WebServlet annotation? This servlet is mapped the old
 // fashioned way - Check the web.xml!
 public class PublishBookServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.getRequestDispatcher("publishBook.jsp").forward(request, response);
 	}
 
+	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 		String isbn13 = req.getParameter("isbn13");
@@ -68,21 +70,23 @@ public class PublishBookServlet extends HttpServlet {
 				while (is.read(buffer) != -1) {
 					os.write(buffer);
 				}
-				
+
 				book.setContent(os.toByteArray());
 
 			} catch (IOException e) {
 				System.out.println("Could not upload file!");
 				e.printStackTrace();
 			} finally {
-				if (is != null)
+				if (is != null) {
 					is.close();
-				if (os != null)
+				}
+				if (os != null) {
 					os.close();
+				}
 			}
 
 			boolean isSuccess = database.addBook(book);
-			
+
 			if(isSuccess){
 				req.getSession().setAttribute("message", "Book successfully published");
 				req.getSession().setAttribute("messageClass", "alert-success");
@@ -94,11 +98,11 @@ public class PublishBookServlet extends HttpServlet {
 				// This would be bad data management, and it
 				// could result in duplicate rows in a database.
 				resp.sendRedirect(req.getContextPath() + "/BookPublishing");
-			}else {
+			}	else {
 				req.getSession().setAttribute("message", "There was a problem publishing the book");
 				req.getSession().setAttribute("messageClass", "alert-danger");
 				req.getRequestDispatcher("publishBook.jsp").forward(req, resp);
-				
+
 			}
 		}
 	}

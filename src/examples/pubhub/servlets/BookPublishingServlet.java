@@ -18,9 +18,10 @@ import examples.pubhub.utilities.DAOUtilities;
  */
 @WebServlet("/BookPublishing")
 public class BookPublishingServlet extends HttpServlet {
-	
+
 	private static final long serialVersionUID = 1L;
 
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		// Grab the list of Books from the Database
@@ -29,9 +30,8 @@ public class BookPublishingServlet extends HttpServlet {
 
 		// Populate the list into a variable that will be stored in the session
 		request.getSession().setAttribute("books", bookList);
-		
-//		request.getSession().setAttribute("tags", bookList);
-		
+		request.getSession().setAttribute("tags", bookList);
+
 		request.getRequestDispatcher("bookPublishingHome.jsp").forward(request, response);
 	}
 }

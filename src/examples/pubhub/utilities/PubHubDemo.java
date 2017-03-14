@@ -11,6 +11,7 @@ public class PubHubDemo {
 
 	public static void main(String[] args) {
 
+		// debugging
 		BookDAO bDao = DAOUtilities.getBookDAO();
 		Book book = new Book("33333", "A fresh book", "JK", null);
 		//		bDao.addBook(book);

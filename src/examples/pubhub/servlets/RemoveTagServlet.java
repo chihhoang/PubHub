@@ -35,8 +35,6 @@ public class RemoveTagServlet extends HttpServlet {
 		Tag tag = new Tag(remove_tag);
 		tDao.removeTag(tag, book);
 
-
-
 		request.setAttribute("book", book);
 		request.setAttribute("remove_tag", remove_tag);
 

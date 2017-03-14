@@ -9,12 +9,12 @@ public class Book {
 	private String title;
 	private String author;
 	private LocalDate publishDate;	// Date of publish to the website
-	
+
 	private double price;
-	
+
 	private byte[] content;
-	
-	private List<Tag> tags;		// maintain many to many
+
+	private List<Tag> tags;		// maintain many to many Book_Tag relationship
 
 	// Constructor used when no date is specified
 	public Book(String isbn, String title, String author, byte[] content) {
@@ -24,7 +24,7 @@ public class Book {
 		this.publishDate = LocalDate.now();
 		this.content = content;
 	}
-	
+
 	// Constructor used when a date is specified
 	public Book(String isbn, String title, String author, byte[] content, LocalDate publishDate) {
 		this.isbn13 = isbn;
@@ -33,7 +33,7 @@ public class Book {
 		this.publishDate = publishDate;
 		this.content = content;
 	}
-	
+
 	// Default constructor
 	public Book() {
 		this.isbn13 = null;
@@ -42,7 +42,7 @@ public class Book {
 		this.publishDate = LocalDate.now();
 		this.content = null;
 	}
-	
+
 	public String getIsbn13() {
 		return isbn13;
 	}
@@ -98,6 +98,6 @@ public class Book {
 	public void setTags(List<Tag> tags) {
 		this.tags = tags;
 	}
-	
-	
+
+
 }
